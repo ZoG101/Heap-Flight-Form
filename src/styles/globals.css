@@ -5,13 +5,6 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -23,4 +16,50 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+input {
+  background-image: linear-gradient(80deg, hsl(0, 0%, 14%), 
+                                  hsl(0, 0%, 20%));
+  outline-color: rgb(187, 143, 90);  
+  outline-width: 0.1vw;
+  outline-style: solid;                            
+  border-radius: 10px;
+  padding: 0.3vw;
+}
+
+button {
+  background-image: linear-gradient(45deg, rgb(95, 79, 58), rgb(224, 161, 84));
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease; 
+  font-size: 1.1rem;
+}
+
+button:hover {
+  background-image: linear-gradient(45deg, rgb(189, 145, 87), 
+                                          rgb(248, 183, 104));
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+  transition: all 0.3s ease-in-out; 
 }
