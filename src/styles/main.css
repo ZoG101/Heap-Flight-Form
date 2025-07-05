@@ -30,6 +30,11 @@
     accent-color: rgb(245, 178, 96);
 }
 
+.error {
+    font-size: small;
+    color: rgb(211, 59, 59);
+}
+
 @media screen and (max-width: 1404px) {
     .formInput {
         width: 35vw;

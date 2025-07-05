@@ -16,6 +16,19 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
   const [birthDate, setBD] = useState<string>("");
+  const [CPF, setCPF] = useState<string>("");
+
+  const [CPFErro, setCPFERR] = useState<boolean>(false);
+
+  const formatCPF = (value:string) => {
+    try {
+      setCPF(FormHandler.CPFFormat(value));
+      setCPFERR(false);
+    } catch (error) {
+      console.log(error);
+      if (CPF.length > 14) setCPFERR(true);
+    }
+  }
   
   return (
     <div
@@ -44,12 +57,13 @@ export default function Home() {
             <h2>Dados Pessoais</h2>
             <div className="formInput">
               <label htmlFor="nameForm">Nome Completo</label>
-              <input type="text" name="nameForm" id="nameForm" required />
+              <input type="text" name="nameForm" id="nameForm" placeholder="Fulano de Tal" required />
             </div>
             <div className="formInput">
               <label htmlFor="CPFForm">CPF</label>
-              <input type="text" name="CPFForm" id="CPFForm" required />
+              <input type="text" name="CPFForm" id="CPFForm" value={CPF} onChange={(e) => formatCPF(e.target.value)} placeholder="111.111.111-11" required />
             </div>
+            {CPFErro && <span className="error">Erro ao no formato do CPF</span>}
             <div className="formInput">
               <label htmlFor="birthDateForm">Data de nascimento</label>
               <input type="date" name="birthDateForm" id="birthDateForm" value={birthDate} onChange={(e) => setBD(e.target.value)} required />
