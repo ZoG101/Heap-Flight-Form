@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import MainBox from "@/components/MainBox";
+import { useState } from "react";
+import FormHandler from "@/components/form/FormHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
+  const [birthDate, setBD] = useState<string>("");
+  
   return (
     <div
       className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
@@ -39,55 +43,73 @@ export default function Home() {
           <form action="#" method="post">
             <h2>Dados Pessoais</h2>
             <div className="formInput">
-              <label htmlFor="">Nome Completo</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="nameForm">Nome Completo</label>
+              <input type="text" name="nameForm" id="nameForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">CPF</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="CPFForm">CPF</label>
+              <input type="text" name="CPFForm" id="CPFForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">Data de nascimento</label>
-              <input type="date" name="" id="" />
+              <label htmlFor="birthDateForm">Data de nascimento</label>
+              <input type="date" name="birthDateForm" id="birthDateForm" value={birthDate} onChange={(e) => setBD(e.target.value)} required />
             </div>
             <div className="formInput">
-              <label htmlFor="">Telefone</label>
-              <input type="tel" name="" id="" />
+              <label htmlFor="telForm">Telefone</label>
+              <input type="tel" name="telForm" id="telForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">E-mail</label>
-              <input type="email" name="" id="" />
+              <label htmlFor="emailForm">E-mail</label>
+              <input type="email" name="emailForm" id="emailForm" required />
             </div>
             <h2>Endereço</h2>
             <div className="formInput">
-              <label htmlFor="">CEP</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="CEPForm">CEP</label>
+              <input type="text" name="CEPForm" id="CEPForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">Rua</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="streetForm">Rua</label>
+              <input type="text" name="streetForm" id="streetForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">Bairro</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="neighborForm">Bairro</label>
+              <input type="text" name="neighborForm" id="neighborForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">Número</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="numberForm">Número</label>
+              <input type="text" name="numberForm" id="numberForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">Complemento</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="complementForm">Complemento</label>
+              <input type="text" name="complementForm" id="complementForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">UF</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="UFForm">UF</label>
+              <input type="text" name="UFForm" id="UFForm" required />
             </div>
             <div className="formInput">
-              <label htmlFor="">Cidade</label>
-              <input type="text" name="" id="" />
+              <label htmlFor="stateForm">Estado</label>
+              <input type="text" name="stateForm" id="stateForm" required />
             </div>
+            <div className="formInput">
+              <label htmlFor="cityForm">Cidade</label>
+              <input type="text" name="cityForm" id="cityForm" required />
+            </div>
+            <h2>Prioridade</h2>
+            <div className="formInput">
+              <input className="radioBtt" type="radio" name="priorityForm" id="default" required />
+              <label htmlFor="default">Padrão</label>
+              <input className="radioBtt" type="radio" name="priorityForm" id="minor" required />
+              <label htmlFor="minor">Menor de idade</label>
+              <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" required />
+              <label htmlFor="pregnant">Grávida</label>
+              <input className="radioBtt" type="radio" name="priorityForm" id="elderly" required />
+              <label htmlFor="elderly">Idoso</label>
+            </div>
+            <div className="formButton">
+              <button type="button">Adicionar</button>
               <button type="button">Enviar</button>
+            </div>
           </form>
         </MainBox>
       </main>
@@ -105,7 +127,7 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Learn
+          Learn Next
         </a>
         
       </footer>

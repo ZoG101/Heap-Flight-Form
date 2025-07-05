@@ -18,6 +18,18 @@
     width: 25vw;
 }
 
+.formButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+}
+
+.radioBtt {
+    outline: none;
+    accent-color: rgb(245, 178, 96);
+}
+
 @media screen and (max-width: 1404px) {
     .formInput {
         width: 35vw;
