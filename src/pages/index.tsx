@@ -15,10 +15,20 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
-  const [birthDate, setBD] = useState<string>("");
+  const [name,setName] = useState<string>("");
   const [CPF, setCPF] = useState<string>("");
+  const [birthDate, setBD] = useState<string>("");
 
+  const [nameError, setNameError] = useState<boolean>(false);
   const [CPFErro, setCPFERR] = useState<boolean>(false);
+  const [underage, setUderage] = useState<boolean>(false);
+
+  const verifyName = (value:string) => {
+    setName(value);
+
+    if (!FormHandler.verifyName(value)) setNameError(true);
+    else setNameError(false);
+  }
 
   const formatCPF = (value:string) => {
     try {
@@ -28,6 +38,18 @@ export default function Home() {
       console.log(error);
       if (CPF.length > 14) setCPFERR(true);
     }
+  }
+
+  const formatDB = (value:string) => {
+    try {
+      setBD(value);
+      if (FormHandler.verifyAge(value)) setUderage(false);
+      else setUderage(true);
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log(underage);
   }
   
   return (
@@ -57,20 +79,21 @@ export default function Home() {
             <h2>Dados Pessoais</h2>
             <div className="formInput">
               <label htmlFor="nameForm">Nome Completo</label>
-              <input type="text" name="nameForm" id="nameForm" placeholder="Fulano de Tal" required />
+              <input type="text" name="nameForm" id="nameForm" placeholder="Fulano de Tal" value={name} onChange={(e) => verifyName(e.target.value)} required />
             </div>
+            {nameError && <span className="error">Nome inválido</span>}
             <div className="formInput">
               <label htmlFor="CPFForm">CPF</label>
               <input type="text" name="CPFForm" id="CPFForm" value={CPF} onChange={(e) => formatCPF(e.target.value)} placeholder="111.111.111-11" required />
             </div>
-            {CPFErro && <span className="error">Erro ao no formato do CPF</span>}
+            {CPFErro && <span className="error">Erro no formato do CPF</span>}
             <div className="formInput">
               <label htmlFor="birthDateForm">Data de nascimento</label>
-              <input type="date" name="birthDateForm" id="birthDateForm" value={birthDate} onChange={(e) => setBD(e.target.value)} required />
+              <input type="date" name="birthDateForm" id="birthDateForm" value={birthDate} onChange={(e) => formatDB(e.target.value)} required />
             </div>
             <div className="formInput">
               <label htmlFor="telForm">Telefone</label>
-              <input type="tel" name="telForm" id="telForm" required />
+              <input type="tel" name="telForm" id="telForm" placeholder={"(11) 11111-1111"} required />
             </div>
             <div className="formInput">
               <label htmlFor="emailForm">E-mail</label>
@@ -113,7 +136,7 @@ export default function Home() {
             <div className="formInput">
               <input className="radioBtt" type="radio" name="priorityForm" id="default" required />
               <label htmlFor="default">Padrão</label>
-              <input className="radioBtt" type="radio" name="priorityForm" id="minor" required />
+              <input className="radioBtt" type="radio" name="priorityForm" id="minor" required checked={underage} />
               <label htmlFor="minor">Menor de idade</label>
               <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" required />
               <label htmlFor="pregnant">Grávida</label>

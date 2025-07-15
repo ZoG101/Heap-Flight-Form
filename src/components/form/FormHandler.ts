@@ -79,7 +79,20 @@ class FormHandler {
         } else {
             return value.replaceAll(/[^0-9.-]/g, '');
         }
-    } 
+    }
+
+    /**
+     * Method that verifies the name
+     * @param value It`s the value that is going to be verified
+     * @returns `true` if the name have an acceptable pattern
+     * @returns `false` is the name doesn't have an acceptable pattern
+     * @throws Error if the format is inadequate
+     */
+    static verifyName(value:string) : boolean {
+        const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ'´`^çÇ]{2,}(?: [A-Za-zÀ-ÖØ-öø-ÿ'´`^çÇ]{2,})*$/;
+        if (regex.test(value)) return true;
+        else return false;
+    }
         
 }
 
