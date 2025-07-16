@@ -18,10 +18,13 @@ export default function Home() {
   const [name,setName] = useState<string>("");
   const [CPF, setCPF] = useState<string>("");
   const [birthDate, setBD] = useState<string>("");
+  const [phoneNumber, setPN] = useState<string>("");
 
-  const [nameError, setNameError] = useState<boolean>(false);
+  const [invalidName, setNameError] = useState<boolean>(false);
   const [CPFErro, setCPFERR] = useState<boolean>(false);
   const [underage, setUderage] = useState<boolean>(false);
+  const [elderly, setElderly] = useState<boolean>(false);
+  const [PNError, setPNError] = useState<boolean>(false);
 
   const verifyName = (value:string) => {
     setName(value);
@@ -43,13 +46,27 @@ export default function Home() {
   const formatDB = (value:string) => {
     try {
       setBD(value);
+
       if (FormHandler.verifyAge(value)) setUderage(false);
       else setUderage(true);
+
+      if (FormHandler.isElderly(value)) setElderly(true);
+      else setElderly(false);
     } catch (error) {
       console.log(error);
     }
 
     console.log(underage);
+  }
+
+  const formatPN = (value:string) => {
+    try {
+      setPN(FormHandler.formatPhoneNumber(value));
+      setPNError(false);
+    } catch (error) {
+      console.log(error);
+      if (phoneNumber.length > 15) setPNError(true);
+    }
   }
   
   return (
@@ -81,7 +98,7 @@ export default function Home() {
               <label htmlFor="nameForm">Nome Completo</label>
               <input type="text" name="nameForm" id="nameForm" placeholder="Fulano de Tal" value={name} onChange={(e) => verifyName(e.target.value)} required />
             </div>
-            {nameError && <span className="error">Nome inválido</span>}
+            {invalidName && <span className="error">Nome inválido</span>}
             <div className="formInput">
               <label htmlFor="CPFForm">CPF</label>
               <input type="text" name="CPFForm" id="CPFForm" value={CPF} onChange={(e) => formatCPF(e.target.value)} placeholder="111.111.111-11" required />
@@ -93,11 +110,12 @@ export default function Home() {
             </div>
             <div className="formInput">
               <label htmlFor="telForm">Telefone</label>
-              <input type="tel" name="telForm" id="telForm" placeholder={"(11) 11111-1111"} required />
+              <input type="tel" name="telForm" id="telForm" placeholder="(11) 11111-1111" value={phoneNumber} onChange={(e) => formatPN(e.target.value)} required />
             </div>
+            {PNError && <span className="error">Formato do número de telefone inadequado</span>}
             <div className="formInput">
               <label htmlFor="emailForm">E-mail</label>
-              <input type="email" name="emailForm" id="emailForm" required />
+              <input type="email" name="emailForm" id="emailForm" placeholder="nome@dominio.com" required />
             </div>
             <h2>Endereço</h2>
             <div className="formInput">
@@ -140,7 +158,7 @@ export default function Home() {
               <label htmlFor="minor">Menor de idade</label>
               <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" required />
               <label htmlFor="pregnant">Grávida</label>
-              <input className="radioBtt" type="radio" name="priorityForm" id="elderly" required />
+              <input className="radioBtt" type="radio" name="priorityForm" id="elderly" required checked={elderly} />
               <label htmlFor="elderly">Idoso</label>
             </div>
             <div className="formButton">
