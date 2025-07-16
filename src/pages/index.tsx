@@ -19,12 +19,14 @@ export default function Home() {
   const [CPF, setCPF] = useState<string>("");
   const [birthDate, setBD] = useState<string>("");
   const [phoneNumber, setPN] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   const [invalidName, setNameError] = useState<boolean>(false);
   const [CPFErro, setCPFERR] = useState<boolean>(false);
   const [underage, setUderage] = useState<boolean>(false);
   const [elderly, setElderly] = useState<boolean>(false);
   const [PNError, setPNError] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(false);
 
   const verifyName = (value:string) => {
     setName(value);
@@ -67,6 +69,13 @@ export default function Home() {
       console.log(error);
       if (phoneNumber.length > 15) setPNError(true);
     }
+  }
+
+  const verifyEmail = (value:string) => {
+    setEmail(value);
+
+    if (!FormHandler.verifyEmail(value)) setEmailError(true);
+    else setEmailError(false);
   }
   
   return (
@@ -115,8 +124,9 @@ export default function Home() {
             {PNError && <span className="error">Formato do número de telefone inadequado</span>}
             <div className="formInput">
               <label htmlFor="emailForm">E-mail</label>
-              <input type="email" name="emailForm" id="emailForm" placeholder="nome@dominio.com" required />
+              <input type="email" name="emailForm" id="emailForm" placeholder="nome@dominio.com" value={email} onChange={(e) => verifyEmail(e.target.value)} required />
             </div>
+            {emailError && <span className="error">Formato do E-mail inadequado</span>}
             <h2>Endereço</h2>
             <div className="formInput">
               <label htmlFor="CEPForm">CEP</label>

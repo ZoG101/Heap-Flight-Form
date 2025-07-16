@@ -159,6 +159,18 @@ class FormHandler {
             return value.replaceAll(/[^0-9)(-]/g, '');
         }
     }
+
+    /**
+     * Method that verifies the email format
+     * @param value is the value that is going to be verified
+     * @returns `true` if the email have an acceptable pattern
+     * @returns `false` is the email doesn't have an acceptable pattern
+     */
+    static verifyEmail(value:string) : boolean {
+        const regex = /^[A-Za-z0-9.\-]{2,}\@[A-Za-z0-9]{2,}(\.[a-z]{2,})+$/;
+        if (regex.test(value)) return true;
+        else return false;
+    }
         
 }
 
