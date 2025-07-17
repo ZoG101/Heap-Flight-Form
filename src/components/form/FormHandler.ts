@@ -171,7 +171,44 @@ class FormHandler {
         if (regex.test(value)) return true;
         else return false;
     }
-        
+
+    /**
+     * Method that formats the user's CEP
+     * @param value is the value that is going to be formated
+     * @returns `string` of the formated CEP number
+     * @throws Error if the format is inadequate
+     */
+    static formatCEP(value:string) : string {
+        if (value.length >= 8 && value.length < 10) {
+            value = value.replaceAll('-', '');
+
+            return value.slice(0, 5) + 
+            '-' + 
+            value.slice(5, 8);
+        } else if (value.length > 9) {
+            throw Error("Formato inadequado para o número de telefone");
+        } else {
+            value = value.replaceAll('-', '');
+            return value.replaceAll(/[^0-9]/g, '');
+        }
+    }     
+    
+    static async fetchAddres(value: string): Promise<object> {
+        const CEP = value.replaceAll('-', '');
+        const url = `https://viacep.com.br/ws/${CEP}/json`;
+        const options: RequestInit = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'content-type': 'application/json; charset=utf-8',
+            },
+        };
+
+        const res = await fetch(url, options);
+        if (!res.ok) throw Error("Erro na requisição");
+        const data = await res.json();
+        return data;
+    }
 }
 
 export default FormHandler;

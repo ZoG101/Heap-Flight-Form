@@ -15,18 +15,37 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
+  /**
+   * States for user's the personal data
+   */
   const [name,setName] = useState<string>("");
   const [CPF, setCPF] = useState<string>("");
   const [birthDate, setBD] = useState<string>("");
   const [phoneNumber, setPN] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
+  /**
+   * Error states for the user's personal data
+   */
   const [invalidName, setNameError] = useState<boolean>(false);
   const [CPFErro, setCPFERR] = useState<boolean>(false);
   const [underage, setUderage] = useState<boolean>(false);
   const [elderly, setElderly] = useState<boolean>(false);
   const [PNError, setPNError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
+
+  /**
+   * States for the user's addres 
+   */
+  const [cep, setCep] = useState<string>("");
+  const [addres, setAddres] = useState<object>({
+    street: "",
+    neighborhood: "",
+    houseNumber: "",
+    Complement: "",
+    State: "",
+    City: ""
+  });
 
   const verifyName = (value:string) => {
     setName(value);
@@ -76,6 +95,25 @@ export default function Home() {
 
     if (!FormHandler.verifyEmail(value)) setEmailError(true);
     else setEmailError(false);
+  }
+
+  const formatCep = (value:string) => {
+    try {
+      setCep(FormHandler.formatCEP(value));
+    } catch (error) {
+     console.log(error); 
+    }
+  }
+
+  const searchAddres = async (value:string) => {
+    if (!(value.length === 9)) return;
+
+    try {
+      const formData = await FormHandler.fetchAddres(value);
+      console.log(formData);
+    } catch (error) {
+      console.log(error);
+    }
   }
   
   return (
@@ -130,7 +168,7 @@ export default function Home() {
             <h2>Endereço</h2>
             <div className="formInput">
               <label htmlFor="CEPForm">CEP</label>
-              <input type="text" name="CEPForm" id="CEPForm" required />
+              <input type="text" name="CEPForm" id="CEPForm" value={cep} onChange={(e) => formatCep(e.target.value)} onBlur={(e) => searchAddres(e.target.value)} required />
             </div>
             <div className="formInput">
               <label htmlFor="streetForm">Rua</label>
@@ -147,10 +185,6 @@ export default function Home() {
             <div className="formInput">
               <label htmlFor="complementForm">Complemento</label>
               <input type="text" name="complementForm" id="complementForm" required />
-            </div>
-            <div className="formInput">
-              <label htmlFor="UFForm">UF</label>
-              <input type="text" name="UFForm" id="UFForm" required />
             </div>
             <div className="formInput">
               <label htmlFor="stateForm">Estado</label>
