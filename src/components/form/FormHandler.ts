@@ -193,7 +193,13 @@ class FormHandler {
         }
     }     
     
-    static async fetchAddres(value: string): Promise<object> {
+    /**
+     * Method that fetches the user's address from their CEP
+     * @param value is the CEP
+     * @returns `object` that contains their address
+     * @throws Error if the fetch fails
+     */
+    static async fetchAddress(value: string): Promise<object> {
         const CEP = value.replaceAll('-', '');
         const url = `https://viacep.com.br/ws/${CEP}/json`;
         const options: RequestInit = {

@@ -10,6 +10,10 @@
     height: auto;
 }
 
+.mainTitle {
+    text-decoration: none;
+}
+
 .formInput {
     display: flex;
     justify-content: space-between;
