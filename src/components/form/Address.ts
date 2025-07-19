@@ -1,9 +1,9 @@
 type Address = {
-    logradouro: string;
-    bairro: string;
-    complemento: string;
-    estado: string;
-    localidade: string;
-  };
+  logradouro:string;
+  bairro:string;
+  complemento:string;
+  estado:string;
+  localidade:string;
+};
 
-  export default Address;
+export default Address;

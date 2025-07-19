@@ -62,9 +62,8 @@ class FormHandler {
     /**
     *   Verify if the person is an elder
     *   @param birthDate is the user's birth date
-    *   @throws An `error` if the age is invalid, it's going to return
     *   @return If the person is under-age, it's going to return `false`
-    *   @return If the person is 18+, it's going to return `true`
+    *   @return If the person is 60+, it's going to return `true`
     */ 
     static isElderly(birthDate:string) : boolean {
         const pAge:Date = new Date(birthDate);
@@ -199,7 +198,7 @@ class FormHandler {
      * @returns `object` that contains their address
      * @throws Error if the fetch fails
      */
-    static async fetchAddress(value: string): Promise<object> {
+    static async fetchAddress(value: string) : Promise<object> {
         const CEP = value.replaceAll('-', '');
         const url = `https://viacep.com.br/ws/${CEP}/json`;
         const options: RequestInit = {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import FormHandler from "./FormHandler";
 import Address from "@/components/form/Address";
+import Priority from "@/class/Priority";
 
 const Form = () => {
     /**
@@ -11,6 +12,7 @@ const Form = () => {
     const [birthDate, setBD] = useState<string>("");
     const [phoneNumber, setPN] = useState<string>("");
     const [email, setEmail] = useState<string>("");
+    const [priority, setPriority] = useState<Priority>(Priority.DEFAULT);
 
     /**
      * Error states for the user's personal data
@@ -99,8 +101,8 @@ const Form = () => {
         setCity(formData.localidade);
     }
 
-  const searchAddres = async (value:string) => {
-    if (!(value.length === 9)) return;
+    const searchAddres = async (value:string) => {
+        if (!(value.length === 9)) return;
 
         try {
         const formData = await FormHandler.fetchAddress(value) as Address;
@@ -120,10 +122,12 @@ const Form = () => {
         }
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => event.preventDefault();
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
+        event.preventDefault();
+    }
 
     return (
-        <form action="#" method="post" onSubmit={handleSubmit}>
+        <form action="book" method="post" onSubmit={handleSubmit}>
             <h2>Dados Pessoais</h2>
             <div className="formInput">
                 <label htmlFor="nameForm">Nome Completo</label>
@@ -152,46 +156,46 @@ const Form = () => {
             <h2>Endereço</h2>
             <div className="formInput">
                 <label htmlFor="CEPForm">CEP</label>
-                <input type="text" name="CEPForm" id="CEPForm" value={cep} onChange={(e) => formatCep(e.target.value)} onBlur={(e) => searchAddres(e.target.value)} required />
+                <input type="text" name="CEPForm" id="CEPForm" placeholder="01001-000" value={cep} onChange={(e) => formatCep(e.target.value)} onBlur={(e) => searchAddres(e.target.value)} required />
             </div>
             <div className="formInput">
                 <label htmlFor="streetForm">Rua</label>
-                <input type="text" name="streetForm" id="streetForm" value={street} onChange={(e) => setStreet(e.target.value)} required />
+                <input type="text" name="streetForm" id="streetForm" placeholder="Praça da Sé" value={street} onChange={(e) => setStreet(e.target.value)} required />
             </div>
             <div className="formInput">
                 <label htmlFor="neighborForm">Bairro</label>
-                <input type="text" name="neighborForm" id="neighborForm" value={neighbor} onChange={(e) => setNeighbor(e.target.value)} required />
+                <input type="text" name="neighborForm" id="neighborForm" placeholder="Sé" value={neighbor} onChange={(e) => setNeighbor(e.target.value)} required />
             </div>
             <div className="formInput">
                 <label htmlFor="numberForm">Número</label>
-                <input type="text" name="numberForm" id="numberForm" value={number} onChange={(e) => setNumber(e.target.value)} required />
+                <input type="text" name="numberForm" id="numberForm" placeholder="11111" value={number} onChange={(e) => setNumber(e.target.value)} required />
             </div>
             <div className="formInput">
                 <label htmlFor="complementForm">Complemento</label>
-                <input type="text" name="complementForm" id="complementForm" value={complement} onChange={(e) => setComplement(e.target.value)} required />
+                <input type="text" name="complementForm" id="complementForm" placeholder="lado ímpar" value={complement} onChange={(e) => setComplement(e.target.value)} required />
             </div>
             <div className="formInput">
                 <label htmlFor="stateForm">Estado</label>
-                <input type="text" name="stateForm" id="stateForm" value={state} onChange={(e) => setState(e.target.value)} required />
+                <input type="text" name="stateForm" id="stateForm" placeholder="São Paulo" value={state} onChange={(e) => setState(e.target.value)} required />
             </div>
             <div className="formInput">
                 <label htmlFor="cityForm">Cidade</label>
-                <input type="text" name="cityForm" id="cityForm" value={city} onChange={(e) => setCity(e.target.value)} required />
+                <input type="text" name="cityForm" id="cityForm" placeholder="São Paulo" value={city} onChange={(e) => setCity(e.target.value)} required />
             </div>
             <h2>Prioridade</h2>
             <div className="formInput">
-                <input className="radioBtt" type="radio" name="priorityForm" id="default" required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="default" onChange={()=>setPriority(Priority.DEFAULT)} required />
                 <label htmlFor="default">Padrão</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="minor" required checked={underage} />
+                <input className="radioBtt" type="radio" name="priorityForm" id="minor" required onChange={()=>setPriority(Priority.MINOR)} checked={underage} />
                 <label htmlFor="minor">Menor de idade</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" onChange={()=>setPriority(Priority.PREGNANT)} required />
                 <label htmlFor="pregnant">Grávida</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="elderly" required checked={elderly} />
+                <input className="radioBtt" type="radio" name="priorityForm" id="elderly" required onChange={()=>setPriority(Priority.ELDER)} checked={elderly} />
                 <label htmlFor="elderly">Idoso</label>
             </div>
             <div className="formButton">
-                <button type="submit">Adicionar</button>
-                <button type="button">Enviar</button>
+                <button type="button">Adicionar</button>
+                <button type="submit">Enviar</button>
             </div>
         </form>
     );
