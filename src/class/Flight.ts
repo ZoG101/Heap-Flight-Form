@@ -34,7 +34,7 @@ class Flight {
         return this.duration;
     }
 
-    addpassengers(passenger:person) : void {
+    addPassengers(passenger:person) : void {
         this.passengers.push(passenger);
         this.definePriority();
     }

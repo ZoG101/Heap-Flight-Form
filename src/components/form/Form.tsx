@@ -2,8 +2,9 @@ import { useState } from "react";
 import FormHandler from "./FormHandler";
 import Address from "@/components/form/Address";
 import Priority from "@/class/Priority";
+import FormOnNext from "@/class/FormOnNext";
 
-const Form = () => {
+const Form = ({ onNext } : FormOnNext) => {
     /**
      * States for user's the personal data
      */
@@ -124,10 +125,11 @@ const Form = () => {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
         event.preventDefault();
+        onNext();
     }
 
     return (
-        <form action="book" method="post" onSubmit={handleSubmit}>
+        <form action="book" method="POST" onSubmit={handleSubmit}>
             <h2>Dados Pessoais</h2>
             <div className="formInput">
                 <label htmlFor="nameForm">Nome Completo</label>

@@ -29,6 +29,13 @@
     gap: 2vw;
 }
 
+.bookFormButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
 .radioBtt {
     outline: none;
     accent-color: rgb(245, 178, 96);
