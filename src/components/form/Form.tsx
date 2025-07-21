@@ -45,25 +45,25 @@ const Form = ({ onNext } : FormOnNext) => {
 
     const formatCPF = (value:string) => {
         try {
-        setCPF(FormHandler.CPFFormat(value));
-        setCPFERR(false);
+            setCPF(FormHandler.CPFFormat(value));
+            setCPFERR(false);
         } catch (error) {
-        console.log(error);
-        if (CPF.length > 14) setCPFERR(true);
+            console.log(error);
+            if (CPF.length > 14) setCPFERR(true);
         }
     }
 
     const formatDB = (value:string) => {
         try {
-        setBD(value);
+            setBD(value);
 
-        if (FormHandler.verifyAge(value)) setUderage(false);
-        else setUderage(true);
+            if (FormHandler.verifyAge(value)) setUderage(false);
+            else setUderage(true);
 
-        if (FormHandler.isElderly(value)) setElderly(true);
-        else setElderly(false);
+            if (FormHandler.isElderly(value)) setElderly(true);
+            else setElderly(false);
         } catch (error) {
-        console.log(error);
+            console.log(error);
         }
 
         console.log(underage);
@@ -71,11 +71,11 @@ const Form = ({ onNext } : FormOnNext) => {
 
     const formatPN = (value:string) => {
         try {
-        setPN(FormHandler.formatPhoneNumber(value));
-        setPNError(false);
+            setPN(FormHandler.formatPhoneNumber(value));
+            setPNError(false);
         } catch (error) {
-        console.log(error);
-        if (phoneNumber.length > 15) setPNError(true);
+            console.log(error);
+            if (phoneNumber.length > 15) setPNError(true);
         }
     }
 
@@ -88,9 +88,9 @@ const Form = ({ onNext } : FormOnNext) => {
 
     const formatCep = (value:string) => {
         try {
-        setCep(FormHandler.formatCEP(value));
+            setCep(FormHandler.formatCEP(value));
         } catch (error) {
-        console.log(error); 
+            console.log(error); 
         }
     }
 
@@ -106,20 +106,20 @@ const Form = ({ onNext } : FormOnNext) => {
         if (!(value.length === 9)) return;
 
         try {
-        const formData = await FormHandler.fetchAddress(value) as Address;
-        if (formData && typeof formData.logradouro === "string") {
-            inputData(formData);
-        } else {
-            inputData({ 
-            logradouro: "",
-            bairro: "",
-            complemento: "",
-            estado: "",
-            localidade: "", 
-            });
-        }
+            const formData = await FormHandler.fetchAddress(value) as Address;
+            if (formData && typeof formData.logradouro === "string") {
+                inputData(formData);
+            } else {
+                inputData({ 
+                logradouro: "",
+                bairro: "",
+                complemento: "",
+                estado: "",
+                localidade: "", 
+                });
+            }
         } catch (error) {
-        console.log(error);
+            console.log(error);
         }
     }
 
@@ -186,13 +186,13 @@ const Form = ({ onNext } : FormOnNext) => {
             </div>
             <h2>Prioridade</h2>
             <div className="formInput">
-                <input className="radioBtt" type="radio" name="priorityForm" id="default" onChange={()=>setPriority(Priority.DEFAULT)} required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="default" value={priority} onChange={()=>setPriority(Priority.DEFAULT)} required />
                 <label htmlFor="default">Padrão</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="minor" required onChange={()=>setPriority(Priority.MINOR)} checked={underage} />
+                <input className="radioBtt" type="radio" name="priorityForm" id="minor" value={priority} onChange={()=>setPriority(Priority.MINOR)} checked={underage} required />
                 <label htmlFor="minor">Menor de idade</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" onChange={()=>setPriority(Priority.PREGNANT)} required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" value={priority} onChange={()=>setPriority(Priority.PREGNANT)} required />
                 <label htmlFor="pregnant">Grávida</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="elderly" required onChange={()=>setPriority(Priority.ELDER)} checked={elderly} />
+                <input className="radioBtt" type="radio" name="priorityForm" id="elderly" value={priority} onChange={()=>setPriority(Priority.ELDER)} checked={elderly} required />
                 <label htmlFor="elderly">Idoso</label>
             </div>
             <div className="formButton">

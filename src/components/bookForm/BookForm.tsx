@@ -1,6 +1,32 @@
+import BookFormHandler from "./BookFormHandler";
 import FormOnNext from "@/class/FormOnNext";
+import TravelType from "./TravelType";
+import { useEffect, useState } from "react";
+import Country from "./CountryType";
 
 const BookForm = ({ onNext } : FormOnNext) => {
+    const [travelType, setTravelType] = useState<TravelType>(TravelType.GOONLY);
+    const [countries, setCountries] = useState<Array<Array<Country>>>([[{ 
+        nome: {
+            abreviado: "Erro ao buscar dados"
+        }
+    }]]);
+
+    useEffect(() => {
+        fetchCountries();
+    }, []);
+
+    const fetchCountries = async () => {
+        try {
+            const formData = await BookFormHandler.fetchCountries() as Array<Array<Country>>;
+            if (formData.length > 0) {
+                setCountries(formData);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
         event.preventDefault();
         onNext();
@@ -11,24 +37,43 @@ const BookForm = ({ onNext } : FormOnNext) => {
             <h2>Dados da Viagem</h2>
             <div className="formInput">
                 <label htmlFor="destinyForm">Destino</label>
-                <select name="destinyForm" id="destinyForm" required>
+                <select className="formSelect" name="destinyForm" id="destinyForm" required>
                     <option value="" disabled selected hidden>Selecione uma opção</option>
+                    {
+                        countries.flat().map((country, idx) => (
+                            <option className="formOption" key={idx} value={country.nome.abreviado}>
+                                {country.nome.abreviado}
+                            </option>
+                        ))
+                    }
                 </select>
             </div>
             <div className="formInput">
-                <input className="radioBtt" type="radio" name="goAndBackForm" id="go" required />
+                <input className="radioBtt" type="radio" name="goAndBackForm" id="go" value={travelType} onChange={() => setTravelType(TravelType.GOONLY)} checked={(travelType === TravelType.GOONLY) && true} required />
                 <label htmlFor="go">Somente ida</label>
-                <input className="radioBtt" type="radio" name="goAndBackForm" id="goAndBack" required />
+                <input className="radioBtt" type="radio" name="goAndBackForm" id="goAndBack" value={travelType} onChange={() => setTravelType(TravelType.GOANDBACK)} checked={(travelType === TravelType.GOANDBACK) && true} required />
                 <label htmlFor="goAndBack">Ida e volta</label>
             </div>
-            <div className="formInput">
-                <label htmlFor="departureForm">Data de ida</label>
-                <input type="date" name="departureForm" id="departureForm" required />
-            </div>
-            <div className="formInput">
-                <label htmlFor="backForm">Data de volta</label>
-                <input type="date" name="backForm" id="backForm" required />
-            </div>
+            {
+                (travelType === TravelType.GOONLY) && 
+                <div className="formInput">
+                    <label htmlFor="departureForm">Data de ida</label>
+                    <input type="date" name="departureForm" id="departureForm" required />
+                </div>
+            }
+            {
+                (travelType === TravelType.GOANDBACK) && 
+                <>
+                    <div className="formInput">
+                        <label htmlFor="departureForm">Data de ida</label>
+                        <input type="date" name="departureForm" id="departureForm" required />
+                    </div>
+                    <div className="formInput">
+                        <label htmlFor="backForm">Data de volta</label>
+                        <input type="date" name="backForm" id="backForm" required />
+                    </div>
+                </>
+            }
             <div className="bookFormButton">
                 <button type="submit">Marcar</button>
             </div>

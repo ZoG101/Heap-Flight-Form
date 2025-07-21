@@ -36,6 +36,23 @@
     width: 100%;
 }
 
+.formOption {
+    background-color: hsl(0, 0%, 10%);
+    color: whitesmoke;
+    text-align: left;
+}
+
+.formSelect {
+    background-image: linear-gradient(45deg, hsl(0, 0%, 10%), 
+                                    hsl(0, 0%, 19%));
+    width: 75%;
+    outline-color: rgb(187, 143, 90);  
+    outline-width: 0.1vw;
+    outline-style: solid;
+    border-radius: 8px;
+    text-align: center;
+}
+
 .radioBtt {
     outline: none;
     accent-color: rgb(245, 178, 96);

@@ -42,7 +42,7 @@ input {
                                   hsl(0, 0%, 20%));
   outline-color: rgb(187, 143, 90);  
   outline-width: 0.1vw;
-  outline-style: solid;                            
+  outline-style: solid;
   border-radius: 10px;
   padding: 0.3vw;
 }
