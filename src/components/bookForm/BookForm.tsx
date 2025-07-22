@@ -6,26 +6,30 @@ import Country from "./CountryType";
 
 const BookForm = ({ onNext } : FormOnNext) => {
     const [travelType, setTravelType] = useState<TravelType>(TravelType.GOONLY);
-    const [countries, setCountries] = useState<Array<Array<Country>>>([[{ 
-        nome: {
-            abreviado: "Erro ao buscar dados"
-        }
-    }]]);
+    const [countries, setCountries] = useState<Map<number, Country>>(new Map<number, Country>());
 
-    useEffect(() => {
-        fetchCountries();
-    }, []);
+    const setDataIntoMap = (data:Array<Array<Country>>) => {
+        const newMap = new Map<number, Country>();
+        data.flat().forEach(country => {
+            newMap.set(country.id.M49, country);
+        });
+        setCountries(newMap);
+    }
 
     const fetchCountries = async () => {
         try {
             const formData = await BookFormHandler.fetchCountries() as Array<Array<Country>>;
             if (formData.length > 0) {
-                setCountries(formData);
+                setDataIntoMap(formData);
             }
         } catch (error) {
             console.log(error);
         }
     }
+
+    useEffect(() => {
+        fetchCountries();
+    }, []);
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
         event.preventDefault();
@@ -40,11 +44,16 @@ const BookForm = ({ onNext } : FormOnNext) => {
                 <select className="formSelect" name="destinyForm" id="destinyForm" required>
                     <option value="" disabled selected hidden>Selecione uma opção</option>
                     {
-                        countries.flat().map((country, idx) => (
-                            <option className="formOption" key={idx} value={country.nome.abreviado}>
+                        (countries.size > 0) ?
+                        Array.from(countries.values()).map((country, idx) => (
+                            <option className="formOption" key={country.id.M49 ?? idx} value={country.nome.abreviado}>
                                 {country.nome.abreviado}
                             </option>
-                        ))
+                        )) 
+                        :
+                        <option className="formOption" key={-1} value={"ERRO"}>
+                            Erro ao buscar países
+                        </option>
                     }
                 </select>
             </div>

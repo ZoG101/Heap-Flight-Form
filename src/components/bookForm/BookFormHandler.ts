@@ -1,7 +1,7 @@
 class BookFormHandler {
     /**
      * Method that fetches the countries names
-     * @returns `object[]` that contains their names and other infos
+     * @returns `Promise<object[]>` that contains their names and other infos
      * @throws Error if the fetch fails
      */
     static async fetchCountries() : Promise<object[]> {
@@ -17,7 +17,6 @@ class BookFormHandler {
         const res = await fetch(url, options);
         if (!res.ok) throw Error("Erro na requisição");
         const data = await res.json();
-        console.log(data);
         return data;
     }
 }
