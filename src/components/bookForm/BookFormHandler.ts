@@ -19,6 +19,36 @@ class BookFormHandler {
         const data = await res.json();
         return data;
     }
+
+    /**
+    *   Verifies if the date of departure is valid or not
+    *   @param date is the departures's date
+    *   @throws An `error` if the date is invalid
+    *   @return If the date is valid, it's going to return `true`
+    */ 
+    static checkDepartureDate(departureDate:string) : boolean {
+        const departure:Date = new Date(departureDate);
+        const now:Date = new Date();
+
+        if (departure.getTime() < now.getTime()) throw Error("Data de ida inválida");
+        
+        return true;
+    }
+
+    /**
+    *   Verifies if the date of back flight is valid or not
+    *   @param date is the back flight's date
+    *   @throws An `error` if the date is invalid
+    *   @return If the date is valid, it's going to return `true`
+    */ 
+    static checkBackDate(departureDate:string, backDate:string) : boolean {
+        const departure:Date = new Date(departureDate);
+        const back:Date = new Date(backDate);
+
+        if ((departure.getTime() + 1) > back.getTime()) throw Error("Data de volta inválida");
+        
+        return true;
+    }
 }
 
 export default BookFormHandler;
