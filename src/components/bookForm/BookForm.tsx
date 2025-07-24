@@ -8,12 +8,13 @@ const BookForm = ({ onNext } : FormOnNext) => {
     const [travelType, setTravelType] = useState<TravelType>(TravelType.GOONLY);
     const [countries, setCountries] = useState<Map<number, Country>>(new Map<number, Country>());
 
-    const [departureDate, setDepartureDate] = useState<string>('');
-    const [backDate, setBackDate] = useState<string>('');
     const [detiny, setDestiny] = useState<string>('');
+    const [departureDate, setDepartureDate] = useState<string>('');
+    const [returnDate, setReturnDate] = useState<string>('');
 
+    const [detinyError, setDestinyError] = useState<boolean>(false);
     const [departureDateError, setDepartureDateError] = useState<boolean>(false);
-    const [backDateError, setBackDateError] = useState<boolean>(false);
+    const [returnDateError, setReturnDateError] = useState<boolean>(false);
 
     const setDataIntoMap = (data:Array<Array<Country>>) => {
         const newMap = new Map<number, Country>();
@@ -38,9 +39,31 @@ const BookForm = ({ onNext } : FormOnNext) => {
         fetchCountries();
     }, []);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (!(BookFormHandler.verifyBlankContent(detiny))) {
+            setDestinyError(true);
+            return;
+        } else if (!(BookFormHandler.verifyBlankContent(departureDate))) {
+            setDepartureDateError(true);
+            return;
+        } else if (travelType === TravelType.GOANDBACK && (!(BookFormHandler.verifyBlankContent(returnDate)))) {
+            setReturnDateError(true);
+            return;
+        }
+
         onNext();
+    }
+
+    const handleSelection = (data:string) => {
+        try {
+            setDestiny(data);
+            setDestinyError(false);
+        } catch (error) {
+            console.log(error);
+            setDestinyError(true);
+        }
     }
 
     const checkDepartureDate = (date:string) => {
@@ -55,14 +78,15 @@ const BookForm = ({ onNext } : FormOnNext) => {
         }
     }
 
-    const checkBackDate = (date:string) => {
+    const checkReturnDate = (date:string) => {
+        if (departureDate.length === 0) return;
         try {
             if (BookFormHandler.checkBackDate(departureDate, date)) {
-                setBackDate(date);
-                setBackDateError(false);
+                setReturnDate(date);
+                setReturnDateError(false);
             }
         } catch (error) {
-            if (backDate.length === 0) setBackDateError(true);
+            if (returnDate.length === 0) setReturnDateError(true);
             console.log(error);
         }
     }
@@ -72,7 +96,7 @@ const BookForm = ({ onNext } : FormOnNext) => {
             <h2>Dados da Viagem</h2>
             <div className="formInput">
                 <label htmlFor="destinyForm">Destino</label>
-                <select className="formSelect" name="destinyForm" id="destinyForm" value={detiny} onChange={(e) => setDestiny(e.target.value)} required>
+                <select className="formSelect" name="destinyForm" id="destinyForm" value={detiny} onChange={(e) => handleSelection(e.target.value)} required>
                     <option value="" disabled selected hidden>Selecione uma opção</option>
                     {
                         (countries.size > 0) ?
@@ -88,10 +112,11 @@ const BookForm = ({ onNext } : FormOnNext) => {
                     }
                 </select>
             </div>
+            {(detinyError) && <span className="error">Seleção inválida</span>}
             <div className="formInput">
-                <input className="radioBtt" type="radio" name="goAndBackForm" id="go" value={travelType} onChange={() => setTravelType(TravelType.GOONLY)} checked={(travelType === TravelType.GOONLY) && true} required />
+                <input className="radioBtt" type="radio" name="goAndBackForm" id="go" value={travelType} onChange={() => setTravelType(TravelType.GOONLY)} checked={(travelType === TravelType.GOONLY)} required />
                 <label htmlFor="go">Somente ida</label>
-                <input className="radioBtt" type="radio" name="goAndBackForm" id="goAndBack" value={travelType} onChange={() => setTravelType(TravelType.GOANDBACK)} checked={(travelType === TravelType.GOANDBACK) && true} required />
+                <input className="radioBtt" type="radio" name="goAndBackForm" id="goAndBack" value={travelType} onChange={() => setTravelType(TravelType.GOANDBACK)} checked={(travelType === TravelType.GOANDBACK)} required />
                 <label htmlFor="goAndBack">Ida e volta</label>
             </div>
             {
@@ -117,9 +142,9 @@ const BookForm = ({ onNext } : FormOnNext) => {
                         {(departureDateError) && <span className="error">Data inserida é inválida</span>}
                         <div className="formInput">
                             <label htmlFor="backForm">Data de volta</label>
-                            <input type="date" name="backForm" id="backForm" value={backDate} onChange={(e) => checkBackDate(e.target.value)} required disabled={(departureDate.length === 0)} />
+                            <input type="date" name="backForm" id="backForm" value={returnDate} onChange={(e) => checkReturnDate(e.target.value)} required disabled={(departureDate.length === 0)} />
                         </div>
-                        {(backDateError) && <span className="error">Data de volta é inválida</span>}
+                        {(returnDateError) && <span className="error">Data de volta é inválida</span>}
                     </>
                 )
             }

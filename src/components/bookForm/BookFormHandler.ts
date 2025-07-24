@@ -1,5 +1,28 @@
 class BookFormHandler {
     /**
+     * @param content is the content
+     * @return `true` if everything is not blank
+     * @return `false` if there is something blank
+    */
+    static verifyBlankContent(content:string) : boolean {
+        if (content.length == 0) return false;
+        return true;
+    };
+
+    /**
+     * @param content is the array of content
+     * @return `true` if everything is not blank
+     * @return `false` if there is something blank
+    */
+    static verify(...content:Array<string>) : boolean {
+        let ret = true;
+        content.forEach((e) => {
+            if (!BookFormHandler.verifyBlankContent(e)) ret = false;
+        });
+        return ret
+    }
+
+    /**
      * Method that fetches the countries names
      * @returns `Promise<object[]>` that contains their names and other infos
      * @throws Error if the fetch fails

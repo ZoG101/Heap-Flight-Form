@@ -58,10 +58,15 @@ const Form = ({ onNext } : FormOnNext) => {
             setBD(value);
 
             if (FormHandler.verifyAge(value)) setUderage(false);
-            else setUderage(true);
+            else { 
+                setUderage(true);
+                setPriority(Priority.MINOR)
+            }
 
-            if (FormHandler.isElderly(value)) setElderly(true);
-            else setElderly(false);
+            if (FormHandler.isElderly(value)) {
+                setElderly(true);
+                setPriority(Priority.ELDER);
+            } else setElderly(false);
         } catch (error) {
             console.log(error);
         }
@@ -121,6 +126,12 @@ const Form = ({ onNext } : FormOnNext) => {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const handleSelection = (priority:Priority) => {
+        if ((elderly || underage)) return;
+
+        setPriority(priority);
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
@@ -186,13 +197,13 @@ const Form = ({ onNext } : FormOnNext) => {
             </div>
             <h2>Prioridade</h2>
             <div className="formInput">
-                <input className="radioBtt" type="radio" name="priorityForm" id="default" value={priority} onChange={()=>setPriority(Priority.DEFAULT)} required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="default" value={Priority.DEFAULT} onChange={()=>handleSelection(Priority.DEFAULT)} checked={(priority === Priority.DEFAULT)} required />
                 <label htmlFor="default">Padrão</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="minor" value={priority} onChange={()=>setPriority(Priority.MINOR)} checked={underage} required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="minor" value={Priority.MINOR} checked={((underage) && (priority === Priority.MINOR))} required readOnly />
                 <label htmlFor="minor">Menor de idade</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" value={priority} onChange={()=>setPriority(Priority.PREGNANT)} required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="pregnant" value={Priority.PREGNANT} onChange={()=>handleSelection(Priority.PREGNANT)} checked={(priority === Priority.PREGNANT)} required />
                 <label htmlFor="pregnant">Grávida</label>
-                <input className="radioBtt" type="radio" name="priorityForm" id="elderly" value={priority} onChange={()=>setPriority(Priority.ELDER)} checked={elderly} required />
+                <input className="radioBtt" type="radio" name="priorityForm" id="elderly" value={Priority.ELDER} checked={((elderly) && (priority === Priority.ELDER))} required readOnly />
                 <label htmlFor="elderly">Idoso</label>
             </div>
             <div className="formButton">
