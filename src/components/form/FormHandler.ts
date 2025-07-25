@@ -1,8 +1,8 @@
 class FormHandler {
     /**
      * @param content is the content
-     * @return `true` if everything is not blank
-     * @return `false` if there is something blank
+     * @return `true` if the content is not blank
+     * @return `false` if the content is blank
     */
     static verifyBlankContent(content:string) : boolean {
         if (content.length == 0) return false;

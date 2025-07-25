@@ -19,14 +19,13 @@ const Form = ({ onNext } : FormOnNext) => {
      * Error states for the user's personal data
      */
     const [invalidName, setNameError] = useState<boolean>(false);
-    const [CPFErro, setCPFERR] = useState<boolean>(false);
-    const [underage, setUderage] = useState<boolean>(false);
-    const [elderly, setElderly] = useState<boolean>(false);
+    const [CPFError, setCPFERR] = useState<boolean>(false);
+    const [BDError, setBDError] = useState<boolean>(false);
     const [PNError, setPNError] = useState<boolean>(false);
     const [emailError, setEmailError] = useState<boolean>(false);
 
     /**
-     * States for the user's addres 
+     * States for the user's address
      */
     const [cep, setCep] = useState<string>("");
     const [street, setStreet] = useState<string>("");
@@ -35,6 +34,23 @@ const Form = ({ onNext } : FormOnNext) => {
     const [complement, setComplement] = useState<string>("");
     const [state, setState] = useState<string>("");
     const [city, setCity] = useState<string>("");
+
+    /**
+     * Error states for the address
+     */
+    const [CEPError, setCEPError] = useState<boolean>(false);
+    const [streetError, setStreetError] = useState<boolean>(false);
+    const [neighborError, setNeighborError] = useState<boolean>(false);
+    const [numberError, setNumberError] = useState<boolean>(false);
+    const [complementError, setComplementError] = useState<boolean>(false);
+    const [stateError, setStateError] = useState<boolean>(false);
+    const [cityError, setCityError] = useState<boolean>(false);
+
+    /**
+     * Age control states
+     */
+    const [underage, setUderage] = useState<boolean>(false);
+    const [elderly, setElderly] = useState<boolean>(false);
 
     const verifyName = (value:string) => {
     setName(value);
@@ -55,23 +71,29 @@ const Form = ({ onNext } : FormOnNext) => {
 
     const formatDB = (value:string) => {
         try {
-            setBD(value);
-
-            if (FormHandler.verifyAge(value)) setUderage(false);
-            else { 
+            if (FormHandler.verifyAge(value)) { 
+                setBD(value);
+                setUderage(false);
+            } else { 
+                setBD(value);
                 setUderage(true);
                 setPriority(Priority.MINOR)
             }
 
             if (FormHandler.isElderly(value)) {
+                setBD(value);
                 setElderly(true);
                 setPriority(Priority.ELDER);
-            } else setElderly(false);
+            } else { 
+                setBD(value);
+                setElderly(false);
+            }
+
+            setBDError(false);
         } catch (error) {
+            if (!FormHandler.verifyBlankContent(birthDate)) setBDError(true);
             console.log(error);
         }
-
-        console.log(underage);
     }
 
     const formatPN = (value:string) => {
@@ -94,17 +116,19 @@ const Form = ({ onNext } : FormOnNext) => {
     const formatCep = (value:string) => {
         try {
             setCep(FormHandler.formatCEP(value));
+            setCEPError(false);
         } catch (error) {
+            setCEPError(true);
             console.log(error); 
         }
     }
 
     const inputData = (formData: Address) => {
-        setStreet(formData.logradouro); 
-        setNeighbor(formData.bairro);
-        setComplement(formData.complemento);
-        setState(formData.estado);
-        setCity(formData.localidade);
+        handleStreet(formData.logradouro); 
+        handleNeighbor(formData.bairro);
+        handleComplement(formData.complemento);
+        handleState(formData.estado);
+        handleCity(formData.localidade);
     }
 
     const searchAddres = async (value:string) => {
@@ -128,6 +152,66 @@ const Form = ({ onNext } : FormOnNext) => {
         }
     }
 
+    const handleStreet = (data:string) => {
+        try {
+            setStreet(data);
+            setStreetError(false);
+        } catch (error) {
+            setStateError(true);
+            console.log(error);
+        }
+    }
+
+    const handleNeighbor = (data:string) => {
+        try {
+            setNeighbor(data);
+            setNeighborError(false);
+        } catch (error) {
+            setNeighborError(true);
+            console.log(error);
+        }
+    }
+
+    const handleNumber = (data:string) => {
+        try {
+            setNumber(data);
+            setNumberError(false);
+        } catch (error) {
+            setNumberError(true);
+            console.log(error);
+        }
+    }
+
+    const handleComplement = (data:string) => {
+        try {
+            setComplement(data);
+            setComplementError(false);
+        } catch (error) {
+            setComplementError(true);
+            console.log(error);
+        }
+    }
+
+    const handleState = (data:string) => {
+        try {
+            setState(data);
+            setStateError(false);
+        } catch (error) {
+            setStateError(true);
+            console.log(error);
+        }
+    }
+
+    const handleCity = (data:string) => {
+        try {
+            setCity(data);
+            setCityError(false);
+        } catch (error) {
+            setCityError(true);
+            console.log(error);
+        }
+    }
+
     const handleSelection = (priority:Priority) => {
         if ((elderly || underage)) return;
 
@@ -136,11 +220,50 @@ const Form = ({ onNext } : FormOnNext) => {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
         event.preventDefault();
+
+        if (!FormHandler.verifyBlankContent(name)) { 
+            setNameError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(CPF)) {
+            setCEPError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(birthDate)) {
+            setBDError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(phoneNumber)) {
+            setPNError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(email)) {
+            setEmailError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(cep)) {
+            setCEPError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(street)) {
+            setStreetError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(neighbor)) {
+            setNeighborError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(number)) {
+            setNumberError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(complement)) {
+            setComplementError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(state)) {
+            setStateError(true);
+            return;
+        } else if (!FormHandler.verifyBlankContent(city)) {
+            setCityError(true);
+            return;
+        }
+
         onNext();
     }
 
     return (
-        <form action="book" method="POST" onSubmit={handleSubmit}>
+        <form action="#" method="POST" onSubmit={handleSubmit}>
             <h2>Dados Pessoais</h2>
             <div className="formInput">
                 <label htmlFor="nameForm">Nome Completo</label>
@@ -151,11 +274,12 @@ const Form = ({ onNext } : FormOnNext) => {
                 <label htmlFor="CPFForm">CPF</label>
                 <input type="text" name="CPFForm" id="CPFForm" value={CPF} onChange={(e) => formatCPF(e.target.value)} placeholder="111.111.111-11" required />
             </div>
-            {CPFErro && <span className="error">Erro no formato do CPF</span>}
+            {CPFError && <span className="error">Erro no formato do CPF</span>}
             <div className="formInput">
                 <label htmlFor="birthDateForm">Data de nascimento</label>
                 <input type="date" name="birthDateForm" id="birthDateForm" value={birthDate} onChange={(e) => formatDB(e.target.value)} required />
             </div>
+            {BDError && <span className="error">Data inválida</span>}
             <div className="formInput">
                 <label htmlFor="telForm">Telefone</label>
                 <input type="tel" name="telForm" id="telForm" placeholder="(11) 11111-1111" value={phoneNumber} onChange={(e) => formatPN(e.target.value)} required />
@@ -171,30 +295,37 @@ const Form = ({ onNext } : FormOnNext) => {
                 <label htmlFor="CEPForm">CEP</label>
                 <input type="text" name="CEPForm" id="CEPForm" placeholder="01001-000" value={cep} onChange={(e) => formatCep(e.target.value)} onBlur={(e) => searchAddres(e.target.value)} required />
             </div>
+            {CEPError && <span className="error">Formato do CEP é inadequado</span>}
             <div className="formInput">
                 <label htmlFor="streetForm">Rua</label>
-                <input type="text" name="streetForm" id="streetForm" placeholder="Praça da Sé" value={street} onChange={(e) => setStreet(e.target.value)} required />
+                <input type="text" name="streetForm" id="streetForm" placeholder="Praça da Sé" value={street} onChange={(e) => handleStreet(e.target.value)} required />
             </div>
+            {streetError && <span className="error">Formato do nome da rua é inadequado</span>}
             <div className="formInput">
                 <label htmlFor="neighborForm">Bairro</label>
-                <input type="text" name="neighborForm" id="neighborForm" placeholder="Sé" value={neighbor} onChange={(e) => setNeighbor(e.target.value)} required />
+                <input type="text" name="neighborForm" id="neighborForm" placeholder="Sé" value={neighbor} onChange={(e) => handleNeighbor(e.target.value)} required />
             </div>
+            {neighborError && <span className="error">Formato do ome do bairro é inadequado</span>}
             <div className="formInput">
                 <label htmlFor="numberForm">Número</label>
-                <input type="text" name="numberForm" id="numberForm" placeholder="11111" value={number} onChange={(e) => setNumber(e.target.value)} required />
+                <input type="text" name="numberForm" id="numberForm" placeholder="11111" value={number} onChange={(e) => handleNumber(e.target.value)} required />
             </div>
+            {numberError && <span className="error">Formato do número é inadequado</span>}
             <div className="formInput">
                 <label htmlFor="complementForm">Complemento</label>
-                <input type="text" name="complementForm" id="complementForm" placeholder="lado ímpar" value={complement} onChange={(e) => setComplement(e.target.value)} required />
+                <input type="text" name="complementForm" id="complementForm" placeholder="lado ímpar" value={complement} onChange={(e) => handleComplement(e.target.value)} required />
             </div>
+            {complementError && <span className="error">Formato do complemento é inadequado</span>}
             <div className="formInput">
                 <label htmlFor="stateForm">Estado</label>
-                <input type="text" name="stateForm" id="stateForm" placeholder="São Paulo" value={state} onChange={(e) => setState(e.target.value)} required />
+                <input type="text" name="stateForm" id="stateForm" placeholder="São Paulo" value={state} onChange={(e) => handleState(e.target.value)} required />
             </div>
+            {stateError && <span className="error">Formato do nome do estado é inadequado</span>}
             <div className="formInput">
                 <label htmlFor="cityForm">Cidade</label>
-                <input type="text" name="cityForm" id="cityForm" placeholder="São Paulo" value={city} onChange={(e) => setCity(e.target.value)} required />
+                <input type="text" name="cityForm" id="cityForm" placeholder="São Paulo" value={city} onChange={(e) => handleCity(e.target.value)} required />
             </div>
+            {cityError && <span className="error">Formato do nome da cidade é inadequado</span>}
             <h2>Prioridade</h2>
             <div className="formInput">
                 <input className="radioBtt" type="radio" name="priorityForm" id="default" value={Priority.DEFAULT} onChange={()=>handleSelection(Priority.DEFAULT)} checked={(priority === Priority.DEFAULT)} required />
