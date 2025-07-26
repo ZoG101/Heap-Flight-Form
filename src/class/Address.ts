@@ -17,31 +17,31 @@ class Address {
         this.city = city;
     }
 
-    getCep() : string {
+    public getCep() : string {
         return this.cep;
     }
 
-    getStreet() : string {
+    public getStreet() : string {
         return this.street;
     }
 
-    getNeighbor() : string {
+    public getNeighbor() : string {
         return this.neighbor;
     }
 
-    getNumber() : string {
+    public getNumber() : string {
         return this.number;
     }
 
-    getComplement() : string {
+    public getComplement() : string {
         return this.complement;
     }
 
-    getState() : string {
+    public getState() : string {
         return this.state;
     }
 
-    getCity() : string {
+    public getCity() : string {
         return this.city;
     }
 }

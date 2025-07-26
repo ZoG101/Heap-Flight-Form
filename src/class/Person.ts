@@ -20,31 +20,31 @@ class person {
         this.priority = priority;
     }
 
-    getName() : string {
+    public getName() : string {
         return this.name;
     }
     
-    getCPF() : string {
+    public getCPF() : string {
         return this.CPF;
     }
 
-    getBirthDate() : string {
+    public getBirthDate() : string {
         return this.birthDate;
     }
 
-    getPhoneNumber() : string {
+    public getPhoneNumber() : string {
         return this.phoneNumber;
     }
 
-    getEmail() : string {
+    public getEmail() : string {
         return this.email;
     }
 
-    getAddress() : Address {
+    public getAddress() : Address {
         return this.address;
     }
 
-    getPriority() : Priority {
+    public getPriority() : Priority {
         return this.priority;
     }
 }

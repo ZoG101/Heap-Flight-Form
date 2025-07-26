@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FormHandler from "./FormHandler";
-import Address from "@/components/form/Address";
+import Address from "@/components/form/AddressType";
 import Priority from "@/class/Priority";
 import FormOnNext from "@/class/FormOnNext";
 

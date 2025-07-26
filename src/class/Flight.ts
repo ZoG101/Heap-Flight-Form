@@ -18,25 +18,29 @@ class Flight {
         this.passengers = _passengers || [];
     }
 
-    getFlightNumber() : string {
+    public getFlightNumber() : string {
         return this.flightNumber;
     }
 
-    getDeparture() : string {
+    public getDeparture() : string {
         return this.departure;
     }
 
-    getArrival() : string {
+    public getArrival() : string {
         return this.arrival;
     }
 
-    getDuration() : number {
+    public getDuration() : number {
         return this.duration;
     }
 
-    addPassengers(passenger:person) : void {
+    public addPassengers(passenger:person) : void {
         this.passengers.push(passenger);
         this.definePriority();
+    }
+
+    public getPriority() : Priority {
+        return this.priority;
     }
 
     private definePriority() : void {
