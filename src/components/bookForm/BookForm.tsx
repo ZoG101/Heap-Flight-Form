@@ -3,8 +3,9 @@ import FormOnNext from "@/class/FormOnNext";
 import TravelType from "./TravelType";
 import { useEffect, useState } from "react";
 import Country from "./CountryType";
+import Flight from "@/class/Flight";
 
-const BookForm = ({ onNext } : FormOnNext) => {
+const BookForm = (props:FormOnNext) => {
     const [travelType, setTravelType] = useState<TravelType>(TravelType.GOONLY);
     const [countries, setCountries] = useState<Map<number, Country>>(new Map<number, Country>());
 
@@ -15,6 +16,7 @@ const BookForm = ({ onNext } : FormOnNext) => {
     const [detinyError, setDestinyError] = useState<boolean>(false);
     const [departureDateError, setDepartureDateError] = useState<boolean>(false);
     const [returnDateError, setReturnDateError] = useState<boolean>(false);
+    const [sendFormError, setSendFormError] = useState<boolean>(false);
 
     const setDataIntoMap = (data:Array<Array<Country>>) => {
         const newMap = new Map<number, Country>();
@@ -39,21 +41,52 @@ const BookForm = ({ onNext } : FormOnNext) => {
         fetchCountries();
     }, []);
 
+    const verifyAllFields = () => {
+        if (!(BookFormHandler.verifyBlankContent(detiny))) {
+            setDestinyError(true);
+            return true;
+        } else if (!(BookFormHandler.verifyBlankContent(departureDate))) {
+            setDepartureDateError(true);
+            return true;
+        } else if (travelType === TravelType.GOANDBACK && (!(BookFormHandler.verifyBlankContent(returnDate)))) {
+            setReturnDateError(true);
+            return true;
+        }
+
+        return false;
+    }
+
+    const prepareFlight = () => {
+        if (props.heapData && props.passengers) {
+            const flight:Flight = new Flight((Math.random()*10000).toFixed(0).toString(), departureDate, (new Date(departureDate).getTime() + 1).toString(), 10);
+            if (props.passengers.length > 0) {
+                props.passengers.forEach((e) => {
+                    flight.addPassengers(e);
+                });
+                props.heapData.addFlight(flight);
+            } else {
+                throw new Error("Não há passageiros");
+            }
+            console.log(props.heapData);
+        } else {
+            throw new Error("Não foi possível adicionar voo");
+        }
+    }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!(BookFormHandler.verifyBlankContent(detiny))) {
-            setDestinyError(true);
-            return;
-        } else if (!(BookFormHandler.verifyBlankContent(departureDate))) {
-            setDepartureDateError(true);
-            return;
-        } else if (travelType === TravelType.GOANDBACK && (!(BookFormHandler.verifyBlankContent(returnDate)))) {
-            setReturnDateError(true);
+        if (verifyAllFields()) return;
+
+        try {
+            prepareFlight();
+            setSendFormError(false);
+            props.onNext();
+        } catch (error) {
+            setSendFormError(true);
+            console.log(error);
             return;
         }
-
-        onNext();
     }
 
     const handleSelection = (data:string) => {
@@ -151,6 +184,7 @@ const BookForm = ({ onNext } : FormOnNext) => {
             <div className="bookFormButton">
                 <button type="submit">Marcar</button>
             </div>
+            {(sendFormError) && <span className="error">Data de volta é inválida</span>}
         </form>
     );
 }

@@ -28,7 +28,10 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <MainBox>
           {currentForm === 'formA' && <Form passengers={passengers} onNext={() => setCurrentForm('formB')} />}
-          {currentForm === 'formB' && <BookForm heapData={data} onNext={() => setCurrentForm('formC')} />}
+          {currentForm === 'formB' && <BookForm passengers={passengers} heapData={data} onNext={() => {
+                                                                                                        setCurrentForm('formA'); 
+                                                                                                        setPassengers(new Array<Person>())}} />
+                                                                                                      }
         </MainBox>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">

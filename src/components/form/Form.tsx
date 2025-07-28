@@ -280,13 +280,8 @@ const Form = (props:FormOnNext) => {
         setPriority(Priority.DEFAULT);
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
-        event.preventDefault();
-
-        if (verifyAllFields()) return;
-
-        try {
-            if (props.passengers) {
+    const preparePassenger = () => {
+        if (props.passengers) {
                 props.passengers.push(new Person(
                                                 name, 
                                                 CPF, 
@@ -302,9 +297,18 @@ const Form = (props:FormOnNext) => {
                                                     state, 
                                                     city), 
                                                 priority));
-            } else {
-                throw Error("Não há como armazenar passageiro!");
-            }
+        } else {
+            throw Error("Não há como armazenar passageiro!");
+        }
+    }
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
+        event.preventDefault();
+
+        if (verifyAllFields()) return;
+
+        try {
+            preparePassenger();
             console.log(props.passengers);
             props.onNext();
         } catch (error) {
@@ -316,31 +320,15 @@ const Form = (props:FormOnNext) => {
     const addButton = () => {
         if (verifyAllFields()) return;
 
-        try {
-            if (props.passengers) {
-                props.passengers.push(new Person(
-                                                name, 
-                                                CPF, 
-                                                birthDate, 
-                                                phoneNumber, 
-                                                email, 
-                                                new Address(
-                                                    cep, 
-                                                    street, 
-                                                    neighbor, 
-                                                    number, 
-                                                    complement, 
-                                                    state, 
-                                                    city), 
-                                                priority));
-            } else {
-                throw Error("Não há como armazenar passageiro!");
-            }
+        try { 
+            preparePassenger();
             console.log(props.passengers);
             cleanAllFields();
+            setSendError(false);
         } catch (error) {
             setSendError(true);
             console.log(error);
+            return;
         }
     }
 
