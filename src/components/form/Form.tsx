@@ -1,10 +1,13 @@
 import { useState } from "react";
 import FormHandler from "./FormHandler";
-import Address from "@/components/form/AddressType";
+import AddressType from "@/components/form/AddressType";
 import Priority from "@/class/Priority";
 import FormOnNext from "@/class/FormOnNext";
+import Person from "@/class/Person";
+import Address from "@/class/Address";
 
-const Form = ({ onNext } : FormOnNext) => {
+
+const Form = (props:FormOnNext) => {
     /**
      * States for user's the personal data
      */
@@ -51,6 +54,8 @@ const Form = ({ onNext } : FormOnNext) => {
      */
     const [underage, setUderage] = useState<boolean>(false);
     const [elderly, setElderly] = useState<boolean>(false);
+
+    const[sendError, setSendError] = useState<boolean>(false);
 
     const verifyName = (value:string) => {
     setName(value);
@@ -123,7 +128,7 @@ const Form = ({ onNext } : FormOnNext) => {
         }
     }
 
-    const inputData = (formData: Address) => {
+    const inputData = (formData: AddressType) => {
         handleStreet(formData.logradouro); 
         handleNeighbor(formData.bairro);
         handleComplement(formData.complemento);
@@ -135,7 +140,7 @@ const Form = ({ onNext } : FormOnNext) => {
         if (!(value.length === 9)) return;
 
         try {
-            const formData = await FormHandler.fetchAddress(value) as Address;
+            const formData = await FormHandler.fetchAddress(value) as AddressType;
             if (formData && typeof formData.logradouro === "string") {
                 inputData(formData);
             } else {
@@ -218,48 +223,125 @@ const Form = ({ onNext } : FormOnNext) => {
         setPriority(priority);
     }
 
+    const verifyAllFields = () => {
+        if (!FormHandler.verifyBlankContent(name)) { 
+            setNameError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(CPF)) {
+            setCEPError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(birthDate)) {
+            setBDError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(phoneNumber)) {
+            setPNError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(email)) {
+            setEmailError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(cep)) {
+            setCEPError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(street)) {
+            setStreetError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(neighbor)) {
+            setNeighborError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(number)) {
+            setNumberError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(complement)) {
+            setComplementError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(state)) {
+            setStateError(true);
+            return true;
+        } else if (!FormHandler.verifyBlankContent(city)) {
+            setCityError(true);
+            return true;
+        }
+        return false;
+    }
+
+    const cleanAllFields = () => {
+        setName('');
+        setCPF('');
+        setBD('');
+        setPN('');
+        setEmail('');
+        setCep('');
+        setStreet('');
+        setNeighbor('');
+        setNumber('');
+        setComplement('');
+        setState('');
+        setCity('');
+        setPriority(Priority.DEFAULT);
+    }
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => { 
         event.preventDefault();
 
-        if (!FormHandler.verifyBlankContent(name)) { 
-            setNameError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(CPF)) {
-            setCEPError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(birthDate)) {
-            setBDError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(phoneNumber)) {
-            setPNError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(email)) {
-            setEmailError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(cep)) {
-            setCEPError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(street)) {
-            setStreetError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(neighbor)) {
-            setNeighborError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(number)) {
-            setNumberError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(complement)) {
-            setComplementError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(state)) {
-            setStateError(true);
-            return;
-        } else if (!FormHandler.verifyBlankContent(city)) {
-            setCityError(true);
-            return;
-        }
+        if (verifyAllFields()) return;
 
-        onNext();
+        try {
+            if (props.passengers) {
+                props.passengers.push(new Person(
+                                                name, 
+                                                CPF, 
+                                                birthDate, 
+                                                phoneNumber, 
+                                                email, 
+                                                new Address(
+                                                    cep, 
+                                                    street, 
+                                                    neighbor, 
+                                                    number, 
+                                                    complement, 
+                                                    state, 
+                                                    city), 
+                                                priority));
+            } else {
+                throw Error("Não há como armazenar passageiro!");
+            }
+            console.log(props.passengers);
+            props.onNext();
+        } catch (error) {
+            setSendError(true);
+            console.log(error);
+        }
+    }
+
+    const addButton = () => {
+        if (verifyAllFields()) return;
+
+        try {
+            if (props.passengers) {
+                props.passengers.push(new Person(
+                                                name, 
+                                                CPF, 
+                                                birthDate, 
+                                                phoneNumber, 
+                                                email, 
+                                                new Address(
+                                                    cep, 
+                                                    street, 
+                                                    neighbor, 
+                                                    number, 
+                                                    complement, 
+                                                    state, 
+                                                    city), 
+                                                priority));
+            } else {
+                throw Error("Não há como armazenar passageiro!");
+            }
+            console.log(props.passengers);
+            cleanAllFields();
+        } catch (error) {
+            setSendError(true);
+            console.log(error);
+        }
     }
 
     return (
@@ -338,9 +420,10 @@ const Form = ({ onNext } : FormOnNext) => {
                 <label htmlFor="elderly">Idoso</label>
             </div>
             <div className="formButton">
-                <button type="button">Adicionar</button>
+                <button type="button" onClick={() => addButton()}>Adicionar</button>
                 <button type="submit">Enviar</button>
             </div>
+            {sendError && <span className="error">Não foi possível enviar o formulário...</span>}
         </form>
     );
 }

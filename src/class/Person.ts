@@ -1,7 +1,7 @@
 import Address from './Address';
 import Priority from './Priority';
 
-class person {
+class Person {
     private name:string;
     private CPF:string;
     private birthDate:string;
@@ -49,4 +49,4 @@ class person {
     }
 }
 
-export default person;
+export default Person;

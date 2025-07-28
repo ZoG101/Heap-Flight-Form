@@ -1,4 +1,4 @@
-type Address = {
+type AddressType = {
   logradouro:string;
   bairro:string;
   complemento:string;
@@ -6,4 +6,4 @@ type Address = {
   localidade:string;
 };
 
-export default Address;
+export default AddressType;
