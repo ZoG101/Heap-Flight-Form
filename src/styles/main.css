@@ -63,6 +63,10 @@
     color: rgb(211, 59, 59);
 }
 
+.success {
+    color: rgb(248, 183, 104);
+}
+
 @media screen and (max-width: 1404px) {
     .formInput {
         width: 35vw;

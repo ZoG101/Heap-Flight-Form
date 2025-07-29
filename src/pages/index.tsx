@@ -7,9 +7,11 @@ import { useEffect, useState } from "react";
 import BookForm from "@/components/bookForm/BookForm";
 import HeapData from "@/class/HeapData";
 import Person from "@/class/Person";
+import RepeatForm from "@/components/RepeatForm/RepeatForm";
+import FormTrasitionType from "@/class/FormTrasitionType";
 
 export default function Home() {
-  const [currentForm, setCurrentForm] = useState<'formA' | 'formB' | 'formC'>('formA');
+  const [currentForm, setCurrentForm] = useState<FormTrasitionType>(FormTrasitionType.FORM_A);
   const [data, setData] = useState<HeapData>(new HeapData());
   const [passengers, setPassengers] = useState<Array<Person>>(new Array<Person>());
 
@@ -27,11 +29,28 @@ export default function Home() {
       </header>
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <MainBox>
-          {currentForm === 'formA' && <Form passengers={passengers} onNext={() => setCurrentForm('formB')} />}
-          {currentForm === 'formB' && <BookForm passengers={passengers} heapData={data} onNext={() => {
-                                                                                                        setCurrentForm('formA'); 
-                                                                                                        setPassengers(new Array<Person>())}} />
-                                                                                                      }
+          {
+            (currentForm === FormTrasitionType.FORM_A)
+            && 
+            <Form 
+              passengers={passengers} 
+              onNext={() => setCurrentForm(FormTrasitionType.FORM_B)} />
+          }
+          {
+            (currentForm === FormTrasitionType.FORM_B) 
+            && 
+            <BookForm 
+            passengers={passengers} 
+            heapData={data} 
+            onNext={() => {
+                            setCurrentForm(FormTrasitionType.FORM_C); 
+                            setPassengers(new Array<Person>())}} />
+          }
+          {
+            currentForm === FormTrasitionType.FORM_C 
+            && 
+            <RepeatForm onNext={setCurrentForm} />
+          }
         </MainBox>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">

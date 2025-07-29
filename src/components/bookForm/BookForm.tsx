@@ -58,7 +58,19 @@ const BookForm = (props:FormOnNext) => {
 
     const prepareFlight = () => {
         if (props.heapData && props.passengers) {
-            const flight:Flight = new Flight((Math.random()*10000).toFixed(0).toString(), departureDate, (new Date(departureDate).getTime() + 1).toString(), 10);
+            let flight:Flight;
+            if (travelType === TravelType.GOONLY) {
+                flight = new Flight((Math.random()*10000).toFixed(0).toString(), 
+                                    departureDate, 
+                                    ((new Date(departureDate).getTime() + 1) - (new Date(departureDate).getTime())).toString(), 
+                                    10, undefined);
+            } else {
+                flight = new Flight((Math.random()*10000).toFixed(0).toString(), 
+                                    departureDate, 
+                                    ((new Date(departureDate).getTime() + 1) - (new Date(departureDate).getTime())).toString(), 
+                                    10, returnDate);
+            }
+            
             if (props.passengers.length > 0) {
                 props.passengers.forEach((e) => {
                     flight.addPassengers(e);

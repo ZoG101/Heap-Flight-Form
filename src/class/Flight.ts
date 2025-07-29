@@ -4,18 +4,20 @@ import Priority from "./Priority";
 class Flight {
     private flightNumber:string;
     private departure:string;
+    private returnDate?:string;
     private arrival:string;
     private duration:number;
     private passengers:Array<person>;
     private priority:Priority;
 
-    constructor(flightNumber:string, departure:string, arrival:string, duration:number, ..._passengers:Array<person>) {
+    constructor(flightNumber:string, departure:string, arrival:string, duration:number, _return?:string) {
         this.flightNumber = flightNumber;
         this.departure = departure;
         this.arrival = arrival;
         this.duration = duration;
         this.priority = Priority.DEFAULT;
-        this.passengers = _passengers || [];
+        this.passengers = [];
+        this.returnDate = _return;
     }
 
     public getFlightNumber() : string {
@@ -24,6 +26,11 @@ class Flight {
 
     public getDeparture() : string {
         return this.departure;
+    }
+
+    public getReturn() : string {
+        if (this.returnDate != undefined) return this.returnDate;
+        else return 'UNDEFINED';
     }
 
     public getArrival() : string {
