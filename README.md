@@ -27,6 +27,18 @@ A fila em heap será implementada utilizando uma lista, onde cada elemento é um
 
 O heap será mínimo, ou seja, o elemento com menor prioridade será o primeiro a ser removido da fila. Isso se deve ao fato de que queremos demostrar o funcionamento da fila e portanto, para o heapSort, é mais conveniente tê-lo como mínimo. É claro que, se a prioridade aumenta do menor para o maior, isso não deveria ser implementado em produção, pois o ideal é que o heap seja máximo, ou seja, o elemento com maior prioridade seja o primeiro a ser tratado e removido.
 
+## Deploy
+Para visualizar o projeto em funcionamento, você pode acessar o seguinte link: [Fila em Heap](https://fila-em-heap.vercel.app/).
+
+Caso queira executar o projeto localmente, você pode clonar, instalar as dependências e iniciar seguindo os passos abaixo no prompt de comando:
+
+```bash
+    git clone https://github.com/ZoG101/Heap-Flight-Form.git
+    cd Heap-Flight-Form
+    npm install
+    npm run dev
+```
+
 ## Tecnologias
 
 <div>
