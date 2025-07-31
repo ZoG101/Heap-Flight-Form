@@ -1,4 +1,4 @@
-import person from "./Person";
+import Person from "./Person";
 import Priority from "./Priority";
 
 class Flight {
@@ -7,7 +7,7 @@ class Flight {
     private returnDate?:string;
     private arrival:string;
     private duration:number;
-    private passengers:Array<person>;
+    private passengers:Array<Person>;
     private priority:Priority;
 
     constructor(flightNumber:string, departure:string, arrival:string, duration:number, _return?:string) {
@@ -18,6 +18,11 @@ class Flight {
         this.priority = Priority.DEFAULT;
         this.passengers = [];
         this.returnDate = _return;
+    }
+
+    private definePriority(passenger:Person) : void {
+        if (passenger.getPriority() > this.priority) 
+            this.priority = passenger.getPriority();
     }
 
     public getFlightNumber() : string {
@@ -41,19 +46,17 @@ class Flight {
         return this.duration;
     }
 
-    public addPassengers(passenger:person) : void {
+    public addPassengers(passenger:Person) : void {
         this.passengers.push(passenger);
-        this.definePriority();
+        this.definePriority(passenger);
     }
 
     public getPriority() : Priority {
         return this.priority;
     }
 
-    private definePriority() : void {
-        this.passengers.forEach((e) => {
-            if (e.getPriority() > this.priority) this.priority = e.getPriority();
-        });
+    public getPassengers() : Array<Person> {
+        return this.passengers;
     }
 }
 

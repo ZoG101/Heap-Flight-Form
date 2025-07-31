@@ -9,6 +9,7 @@ import HeapData from "@/class/HeapData";
 import Person from "@/class/Person";
 import RepeatForm from "@/components/RepeatForm/RepeatForm";
 import FormTrasitionType from "@/class/FormTrasitionType";
+import Result from "@/components/result/Result";
 
 export default function Home() {
   const [currentForm, setCurrentForm] = useState<FormTrasitionType>(FormTrasitionType.FORM_A);
@@ -50,6 +51,11 @@ export default function Home() {
             currentForm === FormTrasitionType.FORM_C 
             && 
             <RepeatForm onNext={setCurrentForm} />
+          }
+          {
+            currentForm === FormTrasitionType.RESULT
+            &&
+            <Result onNext={setCurrentForm} heapData={data} />
           }
         </MainBox>
       </main>

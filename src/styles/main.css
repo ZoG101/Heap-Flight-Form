@@ -10,6 +10,27 @@
     height: auto;
 }
 
+.result-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: start;
+    background-image: linear-gradient(45deg, rgb(87, 63, 35), 
+                                    rgb(184, 151, 111));
+    border-radius: 10px;
+    padding: 10px;
+    width: 15.5vw;
+    height: auto;
+    outline-color: rgb(245, 192, 128);  
+    outline-width: 0.1vw;
+    outline-style: solid;
+    margin-bottom: 1vw;
+}
+
+.result-box > h2 {
+    margin-bottom: 10px;
+}
+
 .mainTitle {
     text-decoration: none;
 }
@@ -71,6 +92,22 @@
     .formInput {
         width: 35vw;
     }
+
+    .result-box {
+        width: 20vw;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .result-box {
+        width: 22vw;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .result-box {
+        width: 27vw;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -80,6 +117,10 @@
 
     .main-box {  
         width: 60vw;
+    }
+
+    .result-box {
+        width: 29vw;
     }
 }
 
@@ -91,6 +132,10 @@
     .main-box {  
         width: 60vw;
     }
+
+    .result-box {
+        width: 33vw;
+    }
 }
 
 @media screen and (max-width: 700px) {
@@ -100,6 +145,10 @@
 
     .main-box {  
         width: 70vw;
+    }
+
+    .result-box {
+        width: 43vw;
     }
 }
 
@@ -111,6 +160,10 @@
     .main-box {  
         width: 80vw;
     }
+
+    .result-box {
+        width: 46vw;
+    }
 }
 
 @media screen and (max-width: 498px) {
@@ -120,5 +173,9 @@
 
     .main-box {  
         width: 90vw;
+    }
+
+    .result-box {
+        width: 60vw;
     }
 }
